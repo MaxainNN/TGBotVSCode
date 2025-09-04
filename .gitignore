@@ -4,4 +4,4 @@ __pycache__/
 venv*
 pyvenv.cfg
 Scripts/
-.db
+quiz_bot.db
