@@ -1,4 +1,5 @@
 from aiogram import types, F
+from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
 from app.routers import router
 from app.db import *
@@ -42,10 +43,8 @@ async def handle_answer(callback: types.CallbackQuery):
     if callback.data == "right_answer":
         await callback.message.answer(f"Your choice: {user_answer}. Right! ✔️")
         current_score += 1
-        print(f"DEBUG: User {callback.from_user.id} score increased to {current_score}")
     else:
         await callback.message.answer(f"Your choice: {user_answer}.Wrong. ❌ Right answer: {correct_answer}")
-        print(f"DEBUG: User {callback.from_user.id} score remains {current_score}")
 
     await update_user_score(callback.from_user.id, current_score)
 
@@ -59,4 +58,11 @@ async def handle_answer(callback: types.CallbackQuery):
 
         await update_leaderboard(callback.from_user.id, username, current_score)
         await show_leaderboard(callback.message)
-        await callback.message.answer("Quiz finished! 🧐")    
+
+        builder = ReplyKeyboardBuilder()
+        builder.add(types.KeyboardButton(text="Start quiz!"))
+
+        await callback.message.answer(
+            "Quiz finished! 🧐\n\nWant to try again?",
+            reply_markup=builder.as_markup(resize_keyboard=True)
+        )    
