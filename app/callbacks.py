@@ -46,7 +46,7 @@ async def handle_answer(callback: types.CallbackQuery):
     else:
         await callback.message.answer(f"Your choice: {user_answer}.Wrong. ❌ Right answer: {correct_answer}")
 
-    await update_user_score(callback.from_user.id, current_score)
+    # await update_user_score(callback.from_user.id, current_score)
 
     current_question_index += 1
     await update_quiz_index(callback.from_user.id, current_question_index)
@@ -58,6 +58,7 @@ async def handle_answer(callback: types.CallbackQuery):
 
         await update_leaderboard(callback.from_user.id, username, current_score)
         await show_leaderboard(callback.message)
+        await reset_user_score(callback.from_user.id)
 
         builder = ReplyKeyboardBuilder()
         builder.add(types.KeyboardButton(text="Start quiz!"))
