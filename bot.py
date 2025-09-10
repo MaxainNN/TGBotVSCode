@@ -10,6 +10,7 @@ logging.basicConfig(level=logging.INFO)
 
 bot = Bot(token=cfg.API_TOKEN)
 dp = Dispatcher()
+dp.include_router(router=router)
 
 async def process_event(event):
     update = types.Update.model_validate(json.loads(event['body']), context={"bot": bot})
